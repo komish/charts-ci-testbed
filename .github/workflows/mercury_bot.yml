@@ -46,7 +46,10 @@ jobs:
             --allowed-category partners
 
       # We know that only one file was modified at this point, and it seems
-      # mergeable. Determine if that file was created or modified here.
+      # mergeable. Now we need to determine if that file is effectively new.
+      #
+      # Being "effectively new" just influences whether or not we should be 
+      # checking the lockfile before merging.
       #
       # This step only checks the first file for its modification type!
       - name: Determine if net-new OWNERS file
@@ -62,9 +65,10 @@ jobs:
               pull_number: context.issue.number,
             });
             const ownersFile = resp.data[0];
-            console.log(`Modified file "${ownersFile.filename} has a status of ${ownersFile.status}`);
-            console.log(`setting output: net-new-owners-file=${ownersFile.status == 'added'}`);
-            core.setOutput('net-new-owners-file', ownersFile.status == 'added');
+            console.log(`Modified file "${ownersFile.filename}" has a status of ${ownersFile.status}`);
+            const effectivelyNew = ownersFile.status == 'added' || ownersFile.status == 'renamed';
+            console.log(`setting output: net-new-owners-file=${effectivelyNew}`);
+            core.setOutput('net-new-owners-file', effectivelyNew);
 
       # Only used to assert content of the OWNERS file.
       - name: Checkout Pull Request
