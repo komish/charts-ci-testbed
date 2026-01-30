@@ -137,8 +137,8 @@ jobs:
           && steps.determine-lock-status.outputs.chart-is-locked == 'true'
         env:
           PREVIOUS_FILENAME: ${{ steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset' }}
-          CURRENT_LOCK: join(['charts', steps.determine-lock-status.outputs.locked-to-path], '/')
-          LOCKED_TO_PREVIOUS: ${{ steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset' }} == join(['charts', steps.determine-lock-status.outputs.locked-to-path], '/')
+          CURRENT_LOCK: ${{ format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path) }}
+          LOCKED_TO_PREVIOUS: ${{ steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset' }} == ${{ format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path) }}
         run: |
           echo "Current lock is set to ${CURRENT_LOCK}"
           echo "The previous filename for this rename is: ${PREVIOUS_FILENAME}"
