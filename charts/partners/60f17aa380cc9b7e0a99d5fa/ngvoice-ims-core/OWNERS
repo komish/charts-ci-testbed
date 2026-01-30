@@ -3,7 +3,8 @@ chart:
   shortDescription: unknown
 providerDelivery: false
 publicPgpKey: unknown
-users: []
+users:
+- komish
 vendor:
   label: 60f17aa380cc9b7e0a99d5fa
   name: ng-voice GmbH
