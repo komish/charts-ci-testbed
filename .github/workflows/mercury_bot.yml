@@ -194,12 +194,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge PR
-        id: merge_pr
-        if: ${{ steps.approve_pr.conclusion == 'success' }}
-        uses: pascalgn/automerge-action@v0.16.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_METHOD: squash
-          MERGE_LABELS: ""
-          MERGE_ERROR_FAIL: "true"
+      # - name: Merge PR
+      #   id: merge_pr
+      #   if: ${{ steps.approve_pr.conclusion == 'success' }}
+      #   uses: pascalgn/automerge-action@v0.16.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     MERGE_METHOD: squash
+      #     MERGE_LABELS: ""
+      #     MERGE_ERROR_FAIL: "true"
