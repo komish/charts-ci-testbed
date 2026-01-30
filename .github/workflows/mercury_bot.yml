@@ -128,14 +128,14 @@ jobs:
           fail-workflow-if-locked: 'false'
         
       # Rename operations would produce a locking failure because main has an
-      # existing lock. For renaming operations, look at the locking failure
-      # closely and determine if they're related or not.
-      # 
+      # existing lock for the chart name. For renaming operations, evaluate if
+      # the original file in the rename matches the current lock.
+      #
       # In addition, check to make sure the chart's name is consistent by taking
-      # the new name (which has already been checked above) and comparing to
-      # the name in the lockfile.
-      - name: Asserting renaming semantics
-        id: check-lock-relation
+      # the new name (which has already been checked in a previous step) and
+      # comparing to the name in the lockfile.
+      - name: Assert renaming semantics
+        id: assert-rename-semantics
         if: |
           steps.populate-file-mod-type.outputs.is-rename
           && steps.determine-lock-status.outputs.chart-is-locked == 'true'
@@ -158,9 +158,9 @@ jobs:
         env:
           NET_NEW_OWNERS_FILE: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}
           CHART_IS_LOCKED: ${{ steps.determine-lock-status.outputs.chart-is-locked }}
-          CHART_LOCKED_TO_PREVIOUS: ${{ steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.check-lock-relation.outputs.locked-to-previous-filename == 'true' }}
+          CHART_LOCKED_TO_PREVIOUS: ${{ steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.assert-rename-semantics.outputs.locked-to-previous-filename == 'true' }}
           IS_RENAME: ${{ steps.populate-file-mod-type.outputs.is-rename }}
-          MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && (steps.determine-lock-status.outputs.chart-is-locked == 'false' || (steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.check-lock-relation.outputs.locked-to-previous-filename == 'true'))) }}
+          MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && (steps.determine-lock-status.outputs.chart-is-locked == 'false' || (steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.assert-rename-semantics.outputs.locked-to-previous-filename == 'true'))) }}
         run: |
           echo "OWNERS file is net new: ${NET_NEW_OWNERS_FILE}"
           echo "Chart name is already locked: ${CHART_IS_LOCKED}"
