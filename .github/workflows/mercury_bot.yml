@@ -153,10 +153,13 @@ jobs:
           NET_NEW_OWNERS_FILE: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file }}
           CHART_IS_LOCKED: ${{ steps.determine-lock-status.outputs.chart-is-locked }}
           CHART_LOCKED_TO_PREVIOUS: ${{ steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.check-lock-relation.outputs.locked-to-previous-filename == 'true' }}
+          IS_RENAME: ${{ steps.populate-file-mod-type.outputs.is-rename }}
           MERGE_PR: ${{ steps.populate-file-mod-type.outputs.net-new-owners-file == 'false' || (steps.populate-file-mod-type.outputs.net-new-owners-file == 'true' && (steps.determine-lock-status.outputs.chart-is-locked == 'false' || (steps.determine-lock-status.outputs.chart-is-locked == 'true' && steps.check-lock-relation.outputs.locked-to-previous-filename == 'true'))) }}
         run: |
           echo "OWNERS file is net new: ${NET_NEW_OWNERS_FILE}"
           echo "Chart name is already locked: ${CHART_IS_LOCKED}"
+          echo "This is a namespace rename: ${IS_RENAME}"
+          echo "Existing locks checked, the previous lockfile is being moved to a new path: ${CHART_LOCKED_TO_PREVIOUS}"
           echo "merge_pr=${MERGE_PR}" | tee -a $GITHUB_OUTPUT
 
       - name: Comment on PR
