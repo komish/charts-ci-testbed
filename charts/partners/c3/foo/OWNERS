@@ -1,0 +1,10 @@
+chart:
+  name: foo
+  shortDescription: unknown
+providerDelivery: false
+publicPgpKey: unknown
+users:
+- komish
+vendor:
+  label: c3
+  name: ng-voice GmbH
