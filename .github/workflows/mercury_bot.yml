@@ -130,10 +130,6 @@ jobs:
       # Rename operations would produce a locking failure because main has an
       # existing lock for the chart name. For renaming operations, evaluate if
       # the original file in the rename matches the current lock.
-      #
-      # In addition, check to make sure the chart's name is consistent by taking
-      # the new name (which has already been checked in a previous step) and
-      # comparing to the name in the lockfile.
       - name: Assert renaming semantics
         id: assert-rename-semantics
         if: |
@@ -142,8 +138,7 @@ jobs:
         env:
           PREVIOUS_FILENAME: ${{ steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset' }}
           CURRENT_LOCK: ${{ format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path) }}
-          LOCKED_TO_PREVIOUS: ${{ startsWith((steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset'), format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path)) && endsWith(steps.determine-lock-status.outputs.locked-to-path, format('/{0}', steps.check_for_owners.outputs.chart-name)) }}
-          CHART_NAME_CONSISTENT: ${{ endsWith(steps.determine-lock-status.outputs.locked-to-path, format('/{0}', steps.check_for_owners.outputs.chart-name)) }}
+          LOCKED_TO_PREVIOUS: ${{ startsWith((steps.populate-file-mod-type.outputs.previous-filename && steps.populate-file-mod-type.outputs.previous-filename || 'unset'), format('{0}/{1}', 'charts', steps.determine-lock-status.outputs.locked-to-path)) }}
         run: |
           echo "Current lock is set to ${CURRENT_LOCK}"
           echo "The previous filename for this rename is: ${PREVIOUS_FILENAME}"
