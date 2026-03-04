@@ -1,9 +1,0 @@
-chart:
-  name: wmla231
-  shortDescription: unknown
-providerDelivery: false
-publicPgpKey: unknown
-users: []
-vendor:
-  label: cpd
-  name: IBM Canada Ltd.

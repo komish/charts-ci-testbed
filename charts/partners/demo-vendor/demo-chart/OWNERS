@@ -1,0 +1,9 @@
+chart:
+  name: demo-chart
+  shortDescription: This is a demo chart
+publicPgpKey: null
+users:
+- githubUsername: komish
+vendor:
+  label: demo-vendor
+  name: Demo Vendor
